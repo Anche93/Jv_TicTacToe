@@ -133,3 +133,4 @@ dkms.conf
 .idea
 .DS_Store
 .properties
+src/TicTacToe/src/main/resources/application.properties
