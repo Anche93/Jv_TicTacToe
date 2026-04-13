@@ -54,3 +54,5 @@ bin/
 
 # Gradle
 .gradle/
+
+.properties

@@ -9,15 +9,11 @@ public interface GameService {
 
     int determineFirstPlayer(ModelCurrentGame currentGame);
 
-    GameResult processMove(UUID gameId, int row, int col);
+    GameResult processMove(UUID gameId, int row, int col, UUID playerId);
 
-    ModelCurrentGame makeComputerMove(UUID gameId);
+    GameResult makePlayerMove(UUID gameId, int row, int col, UUID currentPlayer);
 
-    boolean validatePlayerMove(UUID gameId, int row, int col);
+    ModelCurrentGame makeComputerMove(UUID gameId, int valueComp);
 
-    boolean isWinGame(int[][] gameField, int winner);
-
-    boolean isGameOver(int[][] gameField);
-
-    boolean isPlayerMove(UUID gameId);
+    GameResult joinTheGame(UUID gameId, UUID playerId);
 }

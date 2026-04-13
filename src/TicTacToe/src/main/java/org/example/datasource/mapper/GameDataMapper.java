@@ -10,15 +10,25 @@ public class GameDataMapper {
         return new GameEntity(
                 currentGame.getUuid(),
                 currentGame.getGameField().getGameMatrix(),
-                currentGame.getFirstPlayer());
+                currentGame.getIdPlayerX(),
+                currentGame.getIdPlayerO(),
+                currentGame.getOpponent(),
+                currentGame.getGameStatus(),
+                currentGame.getFirstPlayer(),
+                currentGame.getCurrentPlayer());
     }
 
     public static ModelCurrentGame toDomain(GameEntity entity) {
         ModelGameField field = new ModelGameField();
         field.setGameMatrix(entity.getField());
 
-        ModelCurrentGame game = new ModelCurrentGame(entity.getUuid(), field);
+        ModelCurrentGame game = new ModelCurrentGame(entity.getGameUuid(), field);
+        game.setIdPlayerX(entity.getIdPlayerX());
+        game.setIdPlayerO(entity.getIdPlayerO());
+        game.setOpponent(entity.getOpponent());
+        game.setGameStatus(entity.getGameStatus());
         game.setFirstPlayer(entity.getFirstPlayer());
+        game.setCurrentPlayer(entity.getCurrentPlayer());
         return game;
     }
 }

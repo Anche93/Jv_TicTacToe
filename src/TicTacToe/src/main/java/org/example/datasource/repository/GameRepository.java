@@ -1,22 +1,14 @@
 package org.example.datasource.repository;
 
-import org.example.datasource.model.GameStorage;
-import org.example.domain.model.ModelCurrentGame;
+import org.example.datasource.model.GameEntity;
+import org.example.domain.model.GameStatus;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-public class GameRepository {
-    private final GameStorage gameStorage;
+@Repository
+public interface GameRepository extends CrudRepository<GameEntity, UUID> {
 
-    public GameRepository(GameStorage gameStorage) {
-        this.gameStorage = gameStorage;
-    }
-
-    public void saveGame(ModelCurrentGame currentGame) {
-        gameStorage.addGame(currentGame);
-    }
-
-    public ModelCurrentGame getCurrentGame(UUID uuid) {
-        return gameStorage.getCurrentGame(uuid);
-    }
+    Iterable<GameEntity> findByGameStatus(GameStatus status);
 }

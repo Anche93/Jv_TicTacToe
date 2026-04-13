@@ -132,3 +132,4 @@ dkms.conf
 
 .idea
 .DS_Store
+.properties
