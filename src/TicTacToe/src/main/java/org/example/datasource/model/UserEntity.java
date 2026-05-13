@@ -1,12 +1,15 @@
 package org.example.datasource.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 @Entity
 public class UserEntity {
@@ -19,38 +22,13 @@ public class UserEntity {
     private String userLogin;
 
     @Column(name = "User_password", nullable = false)
-    private String passwordHash;
+    private String userPasswordHash;
 
-    public UserEntity() {
-    }
-
-    public UserEntity(UUID userId, String userLogin, String passwordHash) {
-        this.userId = userId;
-        this.userLogin = userLogin;
-        this.passwordHash = passwordHash;
-    }
-
-    public UUID getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
-
-    public String getUserLogin() {
-        return userLogin;
-    }
-
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<RoleEntity> roles = new HashSet<>();
 }

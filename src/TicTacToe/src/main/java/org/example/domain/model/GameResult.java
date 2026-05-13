@@ -1,7 +1,10 @@
 package org.example.domain.model;
 
+import lombok.Getter;
+
 import java.util.UUID;
 
+@Getter
 public class GameResult {
     private ModelCurrentGame currentGame;
     private GameStatus status;
@@ -19,22 +22,6 @@ public class GameResult {
         this.status = status;
         this.infoMessage = infoMessage;
         this.playerId = playerId;
-    }
-
-    public UUID getPlayerId() {
-        return playerId;
-    }
-
-    public ModelCurrentGame getCurrentGame() {
-        return currentGame;
-    }
-
-    public GameStatus getStatus() {
-        return status;
-    }
-
-    public String getInfoMessage() {
-        return infoMessage;
     }
 
     public static GameResult playerWins(ModelCurrentGame currentGame) {
@@ -65,11 +52,11 @@ public class GameResult {
         return new GameResult(currentGame, GameStatus.INVALID_MOVE, reason);
     }
 
-    public static GameResult gameIsEnd(ModelCurrentGame currentGame) {
-        return new GameResult(currentGame, GameStatus.GAME_IS_END, "Игра окончена!");
+    public static GameResult waitingSecondPlayer(ModelCurrentGame currentGame) {
+        return new GameResult(currentGame, GameStatus.WAITING_FOR_PLAYERS, "Дождись противника!");
     }
 
-    public static GameResult emptyGame(ModelCurrentGame currentGame) {
-        return new GameResult(currentGame, GameStatus.EMPTY_GAME, "Игра не найдена!");
+    public static GameResult gameIsEnd(ModelCurrentGame currentGame) {
+        return new GameResult(currentGame, GameStatus.GAME_IS_END, "Игра окончена!");
     }
 }

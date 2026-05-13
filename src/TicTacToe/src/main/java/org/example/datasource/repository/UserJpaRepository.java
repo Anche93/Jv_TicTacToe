@@ -8,9 +8,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends CrudRepository<UserEntity, UUID> {
+public interface UserJpaRepository extends CrudRepository<UserEntity, UUID> {
 
     Optional<UserEntity> findByUserLogin(String login);
+
     boolean existsByUserLogin(String login);
 
 }

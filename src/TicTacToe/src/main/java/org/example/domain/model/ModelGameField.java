@@ -1,18 +1,15 @@
 package org.example.domain.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class ModelGameField {
     private int[][] gameMatrix;
 
     public ModelGameField() {
         gameMatrix = new int[Constant.ROW][Constant.COL];
-    }
-
-    public int[][] getGameMatrix() {
-        return gameMatrix;
-    }
-
-    public void setGameMatrix(int[][] gameMatrix) {
-        this.gameMatrix = gameMatrix;
     }
 
     public void setValue(int row, int col, int value) {

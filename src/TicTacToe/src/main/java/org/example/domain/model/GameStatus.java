@@ -11,7 +11,5 @@ public enum GameStatus {
 
     WAITING_FOR_PLAYERS,
     GAME_CONTINUES,
-    INVALID_MOVE,
-
-    EMPTY_GAME;
+    INVALID_MOVE
 }

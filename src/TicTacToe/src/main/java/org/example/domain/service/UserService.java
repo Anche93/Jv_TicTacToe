@@ -1,14 +1,16 @@
 package org.example.domain.service;
 
 import org.example.domain.model.SignUpRequest;
-import org.springframework.stereotype.Service;
+import org.example.domain.model.User;
 
+import java.util.Optional;
 import java.util.UUID;
 
-@Service
 public interface UserService {
 
-    boolean registration(SignUpRequest request);
+    Optional<User> getUserLogin(String login);
 
-    UUID authorization(String authHeader);
+    Optional<User> getUserById(UUID userId);
+
+    boolean registration(SignUpRequest request);
 }

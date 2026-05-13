@@ -1,11 +1,20 @@
 package org.example.domain.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 import java.util.UUID;
 
+@Getter
+@Setter
+@AllArgsConstructor
 public class User {
     private UUID userId;
     private String userLogin;
     private String userPasswordHash;
+    private List<Role> roles;
 
     public User() {
         this.userId = UUID.randomUUID();
@@ -16,27 +25,7 @@ public class User {
         this.userLogin = userLogin;
     }
 
-    public UUID getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
-
-    public String getUserLogin() {
-        return userLogin;
-    }
-
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
-    }
-
-    public String getUserPasswordHash() {
-        return userPasswordHash;
-    }
-
-    public void setUserPasswordHash(String userPassword) {
-        this.userPasswordHash = userPassword;
+    public void assignDefaultRole() {
+        this.roles = List.of(Role.USER);
     }
 }

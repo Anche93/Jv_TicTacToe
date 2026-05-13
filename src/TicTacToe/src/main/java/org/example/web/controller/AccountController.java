@@ -1,9 +1,10 @@
 package org.example.web.controller;
 
-import org.example.datasource.model.UserEntity;
-import org.example.datasource.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import org.example.domain.model.SignUpRequest;
+import org.example.domain.model.User;
 import org.example.domain.service.UserService;
+import org.example.security.JwtProvider;
 import org.example.web.mapper.UserWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,41 +17,41 @@ import java.util.UUID;
 @RequestMapping("/user")
 public class AccountController {
 
-    private final UserRepository userRepository;
     private final UserService userService;
+    private final JwtProvider jwtProvider;
 
-    public AccountController(UserRepository userRepository, UserService userService) {
-        this.userRepository = userRepository;
+    public AccountController(UserService userService, JwtProvider jwtProvider) {
         this.userService = userService;
+        this.jwtProvider = jwtProvider;
     }
 
     @PostMapping("/reg")
     public ResponseEntity<?> userRegistration(@RequestBody SignUpRequest request) {
         if (userService.registration(request)) {
-            Optional<UserEntity> optionalUser = userRepository.findByUserLogin(request.getLogin());
-            return optionalUser.map(userEntity -> ResponseEntity.status(HttpStatus.CREATED).body(UserWebMapper.toDto(userEntity)))
+            Optional<User> optionalUser = userService.getUserLogin(request.getLogin());
+            return optionalUser.map(user -> ResponseEntity.status(HttpStatus.CREATED)
+                            .body(UserWebMapper.toDto(user)))
                     .orElseGet(() -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
         }
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("Ошибка при регистрации! Пользователь уже существует.");
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body("Ошибка при регистрации! Пользователь уже существует.");
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> userAuthorisation(@RequestHeader("Authorization") String authHeader) {
-        UUID userID = userService.authorization(authHeader);
-        if (userID == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Ошибка в логине или в пароле!");
+    @GetMapping("/me")
+    public ResponseEntity<?> getUserInfoByToken(@RequestHeader("Authorization") String authHeader) {
+        try {
+            String token = authHeader.substring(7);
+            Claims claims = jwtProvider.extractAllClaims(token);
+            UUID userId = UUID.fromString(claims.getSubject());
+            Optional<User> optionalUser = userService.getUserById(userId);
+            if (optionalUser.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Пользователь не найден!");
+            }
+            return ResponseEntity.ok(UserWebMapper.toDto(optionalUser.get()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Невалидный токен");
         }
-        Optional<UserEntity> optionalUser = userRepository.findById(userID);
-        return optionalUser.map(userEntity -> ResponseEntity.ok(UserWebMapper.toDto(optionalUser.get())))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-    }
-
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> getUserInfo(@PathVariable UUID userId) {
-        Optional<UserEntity> optionalUser = userRepository.findById(userId);
-        if (optionalUser.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Пользователь не найден!");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(UserWebMapper.toDto(optionalUser.get()));
     }
 }

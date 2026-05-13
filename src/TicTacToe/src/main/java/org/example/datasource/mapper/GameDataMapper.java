@@ -15,7 +15,8 @@ public class GameDataMapper {
                 currentGame.getOpponent(),
                 currentGame.getGameStatus(),
                 currentGame.getFirstPlayer(),
-                currentGame.getCurrentPlayer());
+                currentGame.getCurrentPlayer(),
+                currentGame.getCreatedAt());
     }
 
     public static ModelCurrentGame toDomain(GameEntity entity) {
@@ -29,6 +30,7 @@ public class GameDataMapper {
         game.setGameStatus(entity.getGameStatus());
         game.setFirstPlayer(entity.getFirstPlayer());
         game.setCurrentPlayer(entity.getCurrentPlayer());
+        game.setCreatedAt(entity.getCreatedAt());
         return game;
     }
 }
