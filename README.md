@@ -71,7 +71,7 @@ jwt.secret=секретный_ключ_для_jwt_который_задаешь_
 ```
 bash
 
-java -jar TicTacToe-1.1.0.jar`
+java -jar TicTacToe-1.2.0.jar`
 ```
 
 Приложение запустится на `http://localhost:8080`
